@@ -1,15 +1,20 @@
 import React from "react";
 import Navigation from "../components/Navigation";
+import Footer from "./Footer";
+import LoadingAnimation from "./Loading";
 
 function AppLayout({ children, userDetails, onLogout }) {
   return (
     <div>
       {userDetails ? (
-        <Navigation firstName={userDetails.firstName} onLogout={onLogout} />
+        <>
+          <Navigation firstName={userDetails.firstName} onLogout={onLogout} />
+          <main>{children}</main>
+          <Footer />
+        </>
       ) : (
-        <p>Loading...</p>
+        <LoadingAnimation />
       )}
-      <main>{children}</main>
     </div>
   );
 }
