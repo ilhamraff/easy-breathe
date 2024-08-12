@@ -8,8 +8,9 @@ import AddictionTestPage from "./pages/AddictionTestPage";
 import { doc, getDoc } from "firebase/firestore";
 import AppLayout from "./components/AppLayout";
 import CalculatorPage from "./pages/CalculatorPage";
-import ArticlePage from "./pages/ArticlePage";
 import AboutPage from "./pages/About";
+import ArticlesPage from "./pages/ArticlesPage";
+import ArticleDetail from "./pages/ArticleDetailPage";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -102,7 +103,19 @@ function App() {
         element={
           user ? (
             <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
-              <ArticlePage />
+              <ArticlesPage />
+            </AppLayout>
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+      <Route
+        path="/articles/:id"
+        element={
+          user ? (
+            <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
+              <ArticleDetail />
             </AppLayout>
           ) : (
             <Navigate to="/login" />
