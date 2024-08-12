@@ -2,9 +2,15 @@ import React, { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../config/firebase";
 import ArticlesList from "../components/ArticleList";
+import { useSearchParams } from "react-router-dom";
+import ArticleSearch from "../components/ArticleSearch";
 
 const ArticlesPage = () => {
   const [articles, setArticles] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [keyword, setKeyword] = useState(() => {
+    return searchParams.get("keyword") || "";
+  });
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -20,6 +26,15 @@ const ArticlesPage = () => {
     fetchArticles();
   }, []);
 
+  function onKeywordChangeHandler(keyword) {
+    setKeyword(keyword);
+    setSearchParams({ keyword });
+  }
+
+  const filteredArticles = articles.filter((article) =>
+    article.title.toLowerCase().includes(keyword.toLowerCase())
+  );
+
   return (
     <div className="articles-page">
       <header className="articles-page__header">
@@ -29,7 +44,8 @@ const ArticlesPage = () => {
           dan menjalani hidup yang lebih sehat
         </p>
       </header>
-      <ArticlesList articles={articles} />
+      <ArticleSearch keyword={keyword} keywordChange={onKeywordChangeHandler} />
+      <ArticlesList articles={filteredArticles} />
     </div>
   );
 };

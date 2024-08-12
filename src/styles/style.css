@@ -742,6 +742,27 @@
 }
 
 /**
+ * article-search
+ *
+*/
+
+.article-search {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.article-search input {
+  width: 100%;
+  max-width: 600px; /* Set maximum width for the search bar */
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  outline: none;
+}
+
+/**
  * article-detail
  *
 */
