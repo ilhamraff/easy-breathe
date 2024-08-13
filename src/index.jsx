@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 
 import "./styles/style.css";
+import "./styles/responsive.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

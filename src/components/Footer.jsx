@@ -7,7 +7,7 @@ function Footer() {
     <footer className="footer">
       <div className="footer-top">
         <div className="footer-left">
-          <h2 className="footer-logo">East Breathe</h2>
+          <h2 className="footer-logo">Easy Breathe</h2>
           <p className="footer-desc">
             Bebaskan Diri Anda dari Kecanduan Merokok
           </p>
