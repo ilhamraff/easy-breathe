@@ -11,6 +11,8 @@ import CalculatorPage from "./pages/CalculatorPage";
 import AboutPage from "./pages/About";
 import ArticlesPage from "./pages/ArticlesPage";
 import ArticleDetail from "./pages/ArticleDetailPage";
+import ForumPage from "./pages/ForumPage";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -49,92 +51,107 @@ function App() {
   }
 
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={user ? <Navigate to="/home" /> : <Navigate to="/login" />}
-      />
-      <Route
-        path="/login"
-        element={user ? <Navigate to="/home" /> : <LoginPage />}
-      />
-      <Route
-        path="/register"
-        element={user ? <Navigate to="/home" /> : <RegisterPage />}
-      />
-      <Route
-        path="/home"
-        element={
-          user ? (
-            <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
-              <HomePage />
-            </AppLayout>
-          ) : (
-            <Navigate to="/login" />
-          )
-        }
-      />
-      <Route
-        path="/addiction-test"
-        element={
-          user ? (
-            <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
-              <AddictionTestPage />
-            </AppLayout>
-          ) : (
-            <Navigate to="/login" />
-          )
-        }
-      />
-      <Route
-        path="/calculator-savings"
-        element={
-          user ? (
-            <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
-              <CalculatorPage />
-            </AppLayout>
-          ) : (
-            <Navigate to="/login" />
-          )
-        }
-      />
-      <Route
-        path="/articles"
-        element={
-          user ? (
-            <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
-              <ArticlesPage />
-            </AppLayout>
-          ) : (
-            <Navigate to="/login" />
-          )
-        }
-      />
-      <Route
-        path="/articles/:id"
-        element={
-          user ? (
-            <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
-              <ArticleDetail />
-            </AppLayout>
-          ) : (
-            <Navigate to="/login" />
-          )
-        }
-      />
-      <Route
-        path="/about"
-        element={
-          user ? (
-            <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
-              <AboutPage />
-            </AppLayout>
-          ) : (
-            <Navigate to="/login" />
-          )
-        }
-      />
-    </Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
+        <Route
+          path="/"
+          element={user ? <Navigate to="/home" /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/login"
+          element={user ? <Navigate to="/home" /> : <LoginPage />}
+        />
+        <Route
+          path="/register"
+          element={user ? <Navigate to="/home" /> : <RegisterPage />}
+        />
+        <Route
+          path="/home"
+          element={
+            user ? (
+              <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
+                <HomePage />
+              </AppLayout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/addiction-test"
+          element={
+            user ? (
+              <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
+                <AddictionTestPage />
+              </AppLayout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/calculator-savings"
+          element={
+            user ? (
+              <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
+                <CalculatorPage />
+              </AppLayout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/forum"
+          element={
+            user ? (
+              <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
+                <ForumPage />
+              </AppLayout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/articles"
+          element={
+            user ? (
+              <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
+                <ArticlesPage />
+              </AppLayout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/articles/:id"
+          element={
+            user ? (
+              <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
+                <ArticleDetail />
+              </AppLayout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
+          path="/about"
+          element={
+            user ? (
+              <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
+                <AboutPage />
+              </AppLayout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+      </Routes>
+    </>
   );
 }
 

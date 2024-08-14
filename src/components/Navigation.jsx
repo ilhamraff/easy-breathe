@@ -28,7 +28,7 @@ function Navigation({ firstName, onLogout }) {
         </li>
         <li className="dropdown">
           <span onClick={toggleDropDown}>
-            Tes & Kalkulator <FiChevronDown />
+            Jelajahi <FiChevronDown />
           </span>
           {isDropDownOpen && (
             <ul className="dropdown-menu">
@@ -37,6 +37,9 @@ function Navigation({ firstName, onLogout }) {
               </li>
               <li>
                 <Link to="/calculator-savings">Kalkulator</Link>
+              </li>
+              <li>
+                <Link to="/forum">Forum Diskusi</Link>
               </li>
             </ul>
           )}

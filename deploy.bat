@@ -1,2 +1,2 @@
-npm run build
+cmd.exe /c npm run build 
 firebase deploy --only hosting

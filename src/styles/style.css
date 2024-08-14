@@ -3,6 +3,7 @@
   margin: 0;
   box-sizing: border-box;
   font-family: "Montserrat", sans-serif;
+  scroll-behavior: smooth;
 }
 
 /**
@@ -589,6 +590,7 @@
 .features-container {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 2rem;
 }
 
@@ -861,6 +863,43 @@
 }
 
 /**
+ * forum-page
+ *
+*/
+
+.forum-page {
+  min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.forum-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.forum-header h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.forum-header p {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.forum-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/**
  * footer
  *
 */
@@ -923,7 +962,7 @@
  *
 */
 
-.spinner-container {
+.app .spinner-container {
   display: flex;
   justify-content: center;
   align-items: center;
