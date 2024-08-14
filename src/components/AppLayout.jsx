@@ -5,7 +5,7 @@ import LoadingAnimation from "./Loading";
 
 function AppLayout({ children, userDetails, onLogout }) {
   return (
-    <div className="App">
+    <div className="app">
       {userDetails ? (
         <>
           <Navigation firstName={userDetails.firstName} onLogout={onLogout} />

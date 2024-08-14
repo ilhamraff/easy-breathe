@@ -900,6 +900,28 @@
 }
 
 /**
+ * loading-component
+ *
+*/
+
+.app .spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.forum-content .forum-spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+/**
  * footer
  *
 */
@@ -955,17 +977,4 @@
   border-top: 1px solid white;
   width: 100%;
   transform: translateY(-1rem);
-}
-
-/**
- * loading-component
- *
-*/
-
-.app .spinner-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100vw;
 }

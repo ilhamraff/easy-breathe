@@ -15,7 +15,9 @@ function ForumPage() {
         </p>
       </header>
       <section className="forum-content">
-        <LoadingAnimation />
+        <div className="forum-spinner-container">
+          <LoadingAnimation />
+        </div>
         <h2>Segera Hadir</h2>
       </section>
     </div>
