@@ -107,7 +107,7 @@ function App() {
           element={
             user ? (
               <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
-                <ForumPage />
+                <ForumPage firstName={userDetails?.firstName} />
               </AppLayout>
             ) : (
               <Navigate to="/login" />

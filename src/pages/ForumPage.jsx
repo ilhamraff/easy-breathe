@@ -1,7 +1,7 @@
 import React from "react";
-import LoadingAnimation from "../components/Loading";
+import Forum from "../components/Forum";
 
-function ForumPage() {
+function ForumPage({ firstName }) {
   return (
     <div className="forum-page">
       <header className="forum-header">
@@ -15,10 +15,7 @@ function ForumPage() {
         </p>
       </header>
       <section className="forum-content">
-        <div className="forum-spinner-container">
-          <LoadingAnimation />
-        </div>
-        <h2>Segera Hadir</h2>
+        <Forum firstName={firstName} />
       </section>
     </div>
   );
