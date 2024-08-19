@@ -50,6 +50,10 @@ function App() {
     }
   }
 
+  function PrivateRoute({ user, children }) {
+    return user ? children : <Navigate to="/login" />;
+  }
+
   return (
     <>
       <ScrollToTop />
@@ -69,85 +73,71 @@ function App() {
         <Route
           path="/home"
           element={
-            user ? (
+            <PrivateRoute user={user}>
               <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
                 <HomePage />
               </AppLayout>
-            ) : (
-              <Navigate to="/login" />
-            )
+            </PrivateRoute>
           }
         />
         <Route
           path="/addiction-test"
           element={
-            user ? (
+            <PrivateRoute user={user}>
               <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
                 <AddictionTestPage />
               </AppLayout>
-            ) : (
-              <Navigate to="/login" />
-            )
+            </PrivateRoute>
           }
         />
         <Route
           path="/calculator-savings"
           element={
-            user ? (
+            <PrivateRoute user={user}>
               <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
                 <CalculatorPage />
               </AppLayout>
-            ) : (
-              <Navigate to="/login" />
-            )
+            </PrivateRoute>
           }
         />
         <Route
           path="/forum"
           element={
-            user ? (
+            <PrivateRoute user={user}>
               <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
                 <ForumPage firstName={userDetails?.firstName} />
               </AppLayout>
-            ) : (
-              <Navigate to="/login" />
-            )
+            </PrivateRoute>
           }
         />
         <Route
           path="/articles"
           element={
-            user ? (
+            <PrivateRoute user={user}>
               <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
                 <ArticlesPage />
               </AppLayout>
-            ) : (
-              <Navigate to="/login" />
-            )
+            </PrivateRoute>
           }
         />
         <Route
           path="/articles/:id"
           element={
-            user ? (
+            <PrivateRoute user={user}>
               <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
                 <ArticleDetail />
               </AppLayout>
-            ) : (
-              <Navigate to="/login" />
-            )
+            </PrivateRoute>
           }
         />
         <Route
           path="/about"
           element={
-            user ? (
+            <PrivateRoute user={user}>
               <AppLayout userDetails={userDetails} onLogout={logoutHandler}>
                 <AboutPage />
               </AppLayout>
-            ) : (
-              <Navigate to="/login" />
-            )
+            </PrivateRoute>
           }
         />
       </Routes>

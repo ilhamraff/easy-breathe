@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import HeroSection from "../components/HeroSection";
 import BenefitsSection from "../components/BenefitSection";
 import FeaturesSection from "../components/FeaturesSection";
+import ArticleSection from "../components/ArticlesSection";
 
 function HomePage() {
   const benefitsRef = useRef(null);
@@ -17,6 +18,7 @@ function HomePage() {
         <BenefitsSection />
       </div>
       <FeaturesSection />
+      <ArticleSection />
     </div>
   );
 }

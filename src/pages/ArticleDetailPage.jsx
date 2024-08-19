@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { db } from "../config/firebase";
 import { doc, getDoc } from "firebase/firestore";
+import LoadingAnimation from "../components/Loading";
 
 function ArticleDetail() {
   const { id } = useParams();
@@ -23,7 +24,7 @@ function ArticleDetail() {
   }, [id]);
 
   if (!article) {
-    return <p>Loading Article ...</p>;
+    return <LoadingAnimation />;
   }
 
   const { thumbnail, author, title, content, createdAt } = article;
