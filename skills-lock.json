@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "firebase-auth-basics": {
+      "source": "firebase/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/firebase-auth-basics/SKILL.md",
+      "computedHash": "4499186c77ea2ba52ad2e0e9ef24f0a07713d09c4b437d8868f8877a673a8e4e"
+    },
+    "firebase-firestore": {
+      "source": "firebase/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/firebase-firestore/SKILL.md",
+      "computedHash": "d2de2f71c3e7f674ca7423adcc48af637cdf9d9cd1fa41d13a44b1dd3ae3bdba"
+    }
+  }
+}

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Input } from "./ui/Input";
+import { Button } from "./ui/Button";
 
 function CalculatorForm({ calculateSavings }) {
   const [pricePerPack, setPricePerPack] = useState("");
@@ -11,32 +13,38 @@ function CalculatorForm({ calculateSavings }) {
   };
 
   return (
-    <form onSubmit={submitHandler}>
-      <div>
-        <label htmlFor="">Harga rokok per bungkus (IDR): </label>
-        <input
-          type="number"
-          value={pricePerPack}
-          onChange={(event) => setPricePerPack(event.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="">Jumlah rokok yang dihisap per hari: </label>
-        <input
-          type="number"
-          value={cigarettesPerDay}
-          onChange={(event) => setCigarettesPerDay(event.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="">Jumlah hari sejak berhenti merokok: </label>
-        <input
-          type="number"
-          value={daysQuit}
-          onChange={(event) => setDaysQuit(event.target.value)}
-        />
-      </div>
-      <button type="submit">Hitung Penghematan</button>
+    <form onSubmit={submitHandler} className="flex flex-col gap-6">
+      <Input
+        id="pricePerPack"
+        type="number"
+        label="Harga rokok per bungkus (IDR)"
+        placeholder="Contoh: 25000"
+        value={pricePerPack}
+        onChange={(event) => setPricePerPack(event.target.value)}
+        min="0"
+        required
+      />
+      <Input
+        id="cigarettesPerDay"
+        type="number"
+        label="Jumlah rokok yang dihisap per hari"
+        placeholder="Contoh: 12"
+        value={cigarettesPerDay}
+        onChange={(event) => setCigarettesPerDay(event.target.value)}
+        min="0"
+        required
+      />
+      <Input
+        id="daysQuit"
+        type="number"
+        label="Jumlah hari sejak berhenti merokok"
+        placeholder="Contoh: 30"
+        value={daysQuit}
+        onChange={(event) => setDaysQuit(event.target.value)}
+        min="0"
+        required
+      />
+      <Button type="submit" className="w-full mt-4">Hitung Penghematan</Button>
     </form>
   );
 }

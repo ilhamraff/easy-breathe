@@ -1,8 +1,9 @@
 // RegisterPage.jsx
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../config/firebase";
-import { setDoc, doc } from "firebase/firestore";
-import { Slide, toast, ToastContainer } from "react-toastify";
+import { setDoc, doc, serverTimestamp } from "firebase/firestore";
+import { ToastContainer } from "react-toastify";
+import { showSuccessToast, showErrorToast } from "../utils/toast";
 import { Link } from "react-router-dom";
 import RegisterInput from "../components/RegisterInput";
 import React from "react";
@@ -18,55 +19,60 @@ function RegisterPage() {
           email: user.email,
           firstName: firstName,
           lastName: lastName,
+          createdAt: serverTimestamp(),
         });
       }
 
-      toast.success("Registrasi Berhasil", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Slide,
-      });
+      showSuccessToast("Registrasi Berhasil");
     } catch (error) {
       console.error(error);
-      toast.error(`Registrasi gagal: ${error.message}`, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Slide,
-      });
+      showErrorToast(`Registrasi gagal: ${error.message}`);
     }
   }
 
   return (
-    <div className="register-page">
-      <div className="register-page__container">
-        <div className="register-page__hero">
-          <img src="login-image.png" alt="" />
+    <div className="flex min-h-screen bg-slate-50">
+      {/* Left Side - Image/Branding */}
+      <div className="hidden w-1/2 bg-teal-900 lg:block relative overflow-hidden">
+        <div className="absolute inset-0 bg-teal-800/20 mix-blend-multiply z-10" />
+        <img 
+          src="login-image.png" 
+          alt="Ilustrasi berhenti merokok" 
+          className="absolute inset-0 w-full h-full object-cover opacity-80"
+        />
+        <div className="absolute inset-0 z-20 flex flex-col justify-end p-12 bg-gradient-to-t from-teal-950 via-teal-900/60 to-transparent">
+          <h2 className="text-4xl font-bold text-white mb-4">Langkah Pertama Anda.</h2>
+          <p className="text-teal-100 max-w-md text-lg">
+            Bergabunglah sekarang dan temukan metode, pelacakan, dan dukungan yang Anda butuhkan untuk kehidupan bebas asap rokok.
+          </p>
         </div>
-        <div className="register-page__form">
-          <h3>Register</h3>
-          <RegisterInput onRegister={registerHandler} />
-          <div>
-            <p>
-              Sudah punya Akun ? <Link to="/login">Masuk</Link>
+      </div>
+
+      {/* Right Side - Form */}
+      <div className="flex w-full flex-col justify-center px-8 sm:px-12 lg:w-1/2 lg:px-24">
+        <div className="mx-auto w-full max-w-sm">
+          <div className="mb-10 text-center lg:text-left">
+            <h1 className="text-3xl font-bold tracking-tight text-slate-900">Buat Akun Baru</h1>
+            <p className="mt-2 text-sm text-slate-600">
+              Isi data diri Anda di bawah ini untuk memulai.
             </p>
+          </div>
+
+          <RegisterInput onRegister={registerHandler} />
+          
+          <div className="mt-8 text-center text-sm text-slate-600">
+            Sudah punya Akun?{" "}
+            <Link to="/login" className="font-semibold text-teal-600 transition-colors hover:text-teal-500">
+              Masuk Disini
+            </Link>
           </div>
         </div>
       </div>
+      
       <ToastContainer />
     </div>
   );
 }
 
 export default RegisterPage;
+

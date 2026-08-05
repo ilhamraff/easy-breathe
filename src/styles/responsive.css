@@ -1,37 +1,4 @@
 @media (max-width: 1024px) {
-  .navigation-brand {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-  }
-
-  .menu-toggle {
-    display: block;
-    display: flex;
-  }
-
-  .navigation-item {
-    display: none;
-  }
-
-  .navigation-item.open {
-    display: flex;
-    gap: 2rem;
-  }
-
-  .navigation-user {
-    display: none;
-  }
-
-  .navigation-item.open .navigation-user {
-    display: flex;
-  }
-
-  .dropdown-menu {
-    background-color: white;
-    z-index: 1000;
-  }
 
   .hero {
     flex-direction: column-reverse;
@@ -95,37 +62,7 @@
 }
 
 @media screen and (max-width: 768px) {
-  .login-page__container {
-    flex-direction: column;
-  }
 
-  .login-page__hero {
-    display: none;
-  }
-
-  .login-page__form {
-    padding: 1.5rem;
-  }
-
-  .login-page__form form {
-    padding: 0px 20px;
-  }
-
-  .register-page__container {
-    flex-direction: column;
-  }
-
-  .register-page__hero {
-    display: none;
-  }
-
-  .register-page__form {
-    padding: 1.5rem;
-  }
-
-  .register-page__form form {
-    padding: 0px 20px;
-  }
 
   .hero {
     display: flex;
@@ -256,36 +193,5 @@
 
   .articles-page__header p {
     font-size: 1rem;
-  }
-
-  .footer-top {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 2rem;
-  }
-
-  .footer-left,
-  .footer-center,
-  .footer-right {
-    width: 100%;
-  }
-
-  .footer-nav ul {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-  }
-
-  .footer-logo {
-    font-size: 1.75rem;
-  }
-
-  .footer-desc {
-    font-size: 0.9rem;
-  }
-
-  .footer-bottom {
-    font-size: 0.8rem;
   }
 }

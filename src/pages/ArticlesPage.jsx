@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../config/firebase";
+import { getAllArticles } from "../services/articles";
 import ArticlesList from "../components/ArticleList";
 import { useSearchParams } from "react-router-dom";
 import ArticleSearch from "../components/ArticleSearch";
+import { ArticleCardSkeleton } from "../components/Skeletons";
 
 const ArticlesPage = () => {
   const [articles, setArticles] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const [keyword, setKeyword] = useState(() => {
     return searchParams.get("keyword") || "";
@@ -14,13 +16,15 @@ const ArticlesPage = () => {
 
   useEffect(() => {
     const fetchArticles = async () => {
-      const articlesCollection = collection(db, "articles");
-      const articlesSnapshot = await getDocs(articlesCollection);
-      const articlesList = articlesSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setArticles(articlesList);
+      try {
+        const articlesList = await getAllArticles();
+        setArticles(articlesList);
+      } catch (err) {
+        console.error("Failed to fetch articles:", err);
+        setError("Gagal memuat artikel. Silakan coba lagi.");
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchArticles();
@@ -35,17 +39,58 @@ const ArticlesPage = () => {
     article.title.toLowerCase().includes(keyword.toLowerCase())
   );
 
+  if (loading) {
+    return (
+      <div className="bg-slate-50 min-h-screen py-16 sm:py-24">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <header className="mx-auto max-w-2xl text-center mb-16">
+            <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Artikel Terbaru Kami</h1>
+            <p className="mt-4 text-lg leading-8 text-slate-600">
+              Jelajahi artikel informatif kami untuk membantu Anda berhenti merokok
+              dan menjalani hidup yang lebih sehat
+            </p>
+          </header>
+          
+          <div className="mt-16 sm:mt-20 lg:mt-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <ArticleCardSkeleton />
+            <ArticleCardSkeleton />
+            <ArticleCardSkeleton />
+            <ArticleCardSkeleton />
+            <ArticleCardSkeleton />
+            <ArticleCardSkeleton />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="articles-page">
+        <p>{error}</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="articles-page">
-      <header className="articles-page__header">
-        <h1>Artikel Terbaru Kami</h1>
-        <p>
-          Jelajahi artikel informatif kami untuk membantu Anda berhenti merokok
-          dan menjalani hidup yang lebih sehat
-        </p>
-      </header>
-      <ArticleSearch keyword={keyword} keywordChange={onKeywordChangeHandler} />
-      <ArticlesList articles={filteredArticles} />
+    <div className="bg-slate-50 min-h-screen py-16 sm:py-24">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <header className="mx-auto max-w-2xl text-center mb-16">
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Artikel Terbaru Kami</h1>
+          <p className="mt-4 text-lg leading-8 text-slate-600">
+            Jelajahi artikel informatif kami untuk membantu Anda berhenti merokok
+            dan menjalani hidup yang lebih sehat
+          </p>
+        </header>
+        
+        <div className="max-w-xl mx-auto mb-16">
+          <ArticleSearch keyword={keyword} keywordChange={onKeywordChangeHandler} />
+        </div>
+        
+        <div className="mt-16 sm:mt-20 lg:mt-24">
+          <ArticlesList articles={filteredArticles} />
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Input } from "./ui/Input";
+import { Button } from "./ui/Button";
 
 function LoginInput({ onLogin }) {
   const [email, setEmail] = useState("");
@@ -10,20 +12,26 @@ function LoginInput({ onLogin }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-full max-w-sm">
+      <Input
         type="email"
+        label="Alamat Email"
         value={email}
-        placeholder="Email"
+        placeholder="nama@email.com"
         onChange={(event) => setEmail(event.target.value)}
+        required
       />
-      <input
+      <Input
         type="password"
+        label="Kata Sandi"
         value={password}
-        placeholder="Password"
+        placeholder="••••••••"
         onChange={(event) => setPassword(event.target.value)}
+        required
       />
-      <button type="submit">Login</button>
+      <Button type="submit" className="w-full mt-2">
+        Masuk
+      </Button>
     </form>
   );
 }

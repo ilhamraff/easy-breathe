@@ -1,0 +1,189 @@
+rules_version = '2';
+
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// Collection: Users
+// Document ID: Firebase Auth UID
+// Fields:
+//   - email: string (required, PII - owner-only access)
+//   - firstName: string (required, 1-100 chars)
+//   - lastName: string (required, 1-100 chars)
+//   - createdAt: timestamp (required, immutable after creation)
+//
+// Collection: articles
+// Document ID: auto-generated
+// Fields:
+//   - title: string (required)
+//   - content: string (required)
+//   - thumbnail: string (optional, URL)
+//   - author: string (required)
+//   - createdAt: string or timestamp (required)
+// Access: Public read, admin-only write (via console for now)
+//
+// Collection: forums
+// Document ID: auto-generated
+// Fields:
+//   - title: string (required, 1-2000 chars)
+//   - author: string (required, display name, 1-100 chars)
+//   - authorId: string (required, Firebase Auth UID, immutable)
+//   - createdAt: timestamp (required, immutable)
+//   - updatedAt: timestamp (optional, set on edit)
+//
+// Subcollection: forums/{postId}/replies
+// Document ID: auto-generated
+// Fields:
+//   - content: string (required, 1-2000 chars)
+//   - author: string (required, display name, 1-100 chars)
+//   - authorId: string (required, Firebase Auth UID, immutable)
+//   - createdAt: timestamp (required, immutable)
+//
+// ===============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    function areImmutableFieldsUnchanged(fields) {
+      return !request.resource.data.diff(resource.data).affectedKeys().hasAny(fields);
+    }
+
+    function validStringLength(field, minLen, maxLen) {
+      return request.resource.data[field] is string &&
+        request.resource.data[field].size() >= minLen &&
+        request.resource.data[field].size() <= maxLen;
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+
+    function isValidUserCreate(data) {
+      return hasOnlyAllowedFields(['email', 'firstName', 'lastName', 'createdAt']) &&
+        hasRequiredFields(['email', 'firstName', 'lastName']) &&
+        data.email is string && data.email.size() > 0 && data.email.size() <= 320 &&
+        data.firstName is string && data.firstName.size() > 0 && data.firstName.size() <= 100 &&
+        data.lastName is string && data.lastName.size() > 0 && data.lastName.size() <= 100;
+    }
+
+    function isValidUserUpdate(data) {
+      return hasOnlyAllowedFields(['email', 'firstName', 'lastName', 'createdAt']) &&
+        hasRequiredFields(['email', 'firstName', 'lastName']) &&
+        data.email is string && data.email.size() > 0 && data.email.size() <= 320 &&
+        data.firstName is string && data.firstName.size() > 0 && data.firstName.size() <= 100 &&
+        data.lastName is string && data.lastName.size() > 0 && data.lastName.size() <= 100 &&
+        areImmutableFieldsUnchanged(['createdAt']);
+    }
+
+    function isValidForumPostCreate(data) {
+      return hasOnlyAllowedFields(['title', 'author', 'authorId', 'createdAt']) &&
+        hasRequiredFields(['title', 'author', 'authorId', 'createdAt']) &&
+        data.title is string && data.title.size() > 0 && data.title.size() <= 2000 &&
+        data.author is string && data.author.size() > 0 && data.author.size() <= 100 &&
+        data.authorId == request.auth.uid &&
+        data.createdAt == request.time;
+    }
+
+    function isValidForumPostUpdate(data) {
+      return hasOnlyAllowedFields(['title', 'author', 'authorId', 'createdAt', 'updatedAt']) &&
+        hasRequiredFields(['title', 'author', 'authorId', 'createdAt']) &&
+        data.title is string && data.title.size() > 0 && data.title.size() <= 2000 &&
+        areImmutableFieldsUnchanged(['author', 'authorId', 'createdAt']);
+    }
+
+    function isValidReplyCreate(data) {
+      return hasOnlyAllowedFields(['content', 'author', 'authorId', 'createdAt']) &&
+        hasRequiredFields(['content', 'author', 'authorId', 'createdAt']) &&
+        data.content is string && data.content.size() > 0 && data.content.size() <= 2000 &&
+        data.author is string && data.author.size() > 0 && data.author.size() <= 100 &&
+        data.authorId == request.auth.uid &&
+        data.createdAt == request.time;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    // Users collection - PII protected, owner-only access
+    match /Users/{userId} {
+      // Only the owner can read their own user document (contains email/PII)
+      allow read: if isOwner(userId);
+
+      // Only the owner can create their own user document
+      allow create: if isOwner(userId) && isValidUserCreate(request.resource.data);
+
+      // Only the owner can update their own user document
+      allow update: if isOwner(userId) && isValidUserUpdate(request.resource.data);
+
+      // Users cannot delete their own profile document
+      allow delete: if false;
+    }
+
+    // Articles collection - public read, no client-side write
+    match /articles/{articleId} {
+      // Anyone can read articles (public content)
+      allow read: if true;
+
+      // Articles are managed via Firebase Console only
+      // No client-side create/update/delete allowed
+      allow create, update, delete: if false;
+    }
+
+    // Forums collection - public read, authenticated write with ownership
+    match /forums/{postId} {
+      // Anyone can read forum posts (public content)
+      allow read: if true;
+
+      // Only authenticated users can create posts
+      allow create: if isAuthenticated() && isValidForumPostCreate(request.resource.data);
+
+      // Only the post author can update their own post
+      allow update: if isAuthenticated() &&
+        resource.data.authorId == request.auth.uid &&
+        isValidForumPostUpdate(request.resource.data);
+
+      // Only the post author can delete their own post
+      allow delete: if isAuthenticated() && resource.data.authorId == request.auth.uid;
+
+      // Replies subcollection
+      match /replies/{replyId} {
+        // Anyone can read replies (public content)
+        allow read: if true;
+
+        // Only authenticated users can create replies
+        allow create: if isAuthenticated() && isValidReplyCreate(request.resource.data);
+
+        // Replies cannot be edited
+        allow update: if false;
+
+        // Only the reply author can delete their own reply
+        allow delete: if isAuthenticated() && resource.data.authorId == request.auth.uid;
+      }
+    }
+
+    // Default: deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

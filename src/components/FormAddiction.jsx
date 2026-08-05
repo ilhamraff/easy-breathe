@@ -1,199 +1,246 @@
-import React from "react";
-import TesHandler from "../utils/addictionHandler";
+import React, { useState, useRef } from "react";
+import {
+  calculateAddiction,
+  validateAnswers,
+} from "../utils/addictionCalculator";
+import { showErrorToast } from "../utils/toast";
+
+const ALL_QUESTIONS = [
+  "age",
+  "gender",
+  "education",
+  "occupation",
+  "q1",
+  "q2",
+  "q3",
+  "q4",
+  "q5",
+  "q6",
+];
+
+const SCORED_QUESTIONS = ["q1", "q2", "q3", "q4", "q5", "q6"];
+
+function RadioGroup({ name, label, options, value, onChange }) {
+  return (
+    <div className="mb-8 p-6 bg-white rounded-2xl border border-slate-200 shadow-sm transition-all hover:border-teal-200" id={name}>
+      <p className="text-lg font-semibold text-slate-800 mb-4">{label}</p>
+      <div className="space-y-3">
+        {options.map((option) => (
+          <label 
+            key={option.id} 
+            className={`flex items-center p-4 border rounded-xl cursor-pointer transition-all ${
+              value === option.value 
+                ? "border-teal-500 bg-teal-50" 
+                : "border-slate-200 hover:border-teal-200 hover:bg-slate-50"
+            }`}
+          >
+            <input
+              type="radio"
+              name={name}
+              value={option.value}
+              id={option.id}
+              checked={value === option.value}
+              onChange={() => onChange(name, option.value)}
+              className="w-5 h-5 text-teal-600 border-gray-300 focus:ring-teal-500"
+            />
+            <span className={`ml-3 text-base ${value === option.value ? "text-teal-900 font-medium" : "text-slate-700"}`}>
+              {option.label}
+            </span>
+          </label>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function AddictionForm({ onCalculateAddiction }) {
-  const handleCalculate = async () => {
-    const result = await TesHandler.hitungKecanduan();
-    if (result && result.score !== undefined) {
-      onCalculateAddiction(result);
+  const [answers, setAnswers] = useState({});
+  const formRef = useRef(null);
+
+  const handleChange = (name, value) => {
+    setAnswers((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleCalculate = () => {
+    const { allAnswered, firstUnanswered } = validateAnswers(
+      answers,
+      ALL_QUESTIONS
+    );
+
+    if (!allAnswered) {
+      showErrorToast("Harap isi semua pertanyaan.");
+      const element = document.getElementById(firstUnanswered);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+      return;
     }
+
+    const result = calculateAddiction(answers, SCORED_QUESTIONS);
+    onCalculateAddiction(result);
+  };
+
+  const handleClear = () => {
+    setAnswers({});
+    onCalculateAddiction({ score: null, addictionLevel: "", progressClass: "", percentage: 0 });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
-    <form>
-      <p>1. Usia:</p>
-      <div>
-        <input type="radio" name="age" value="0" id="under-18" />
-        <label htmlFor="under-18">Di bawah 18 tahun</label>
-      </div>
-      <div>
-        <input type="radio" name="age" value="0" id="18-24" />
-        <label htmlFor="18-24">18-24 tahun</label>
-      </div>
-      <div>
-        <input type="radio" name="age" value="0" id="25-34" />
-        <label htmlFor="25-34">25-34 tahun</label>
-      </div>
-      <div>
-        <input type="radio" name="age" value="0" id="35-44" />
-        <label htmlFor="35-44">35-44 tahun</label>
-      </div>
-      <div>
-        <input type="radio" name="age" value="0" id="45-54" />
-        <label htmlFor="45-54">45-54 tahun</label>
-      </div>
-      <div>
-        <input type="radio" name="age" value="0" id="55-64" />
-        <label htmlFor="55-64">55-64 tahun</label>
-      </div>
-      <div>
-        <input type="radio" name="age" value="0" id="65-above" />
-        <label htmlFor="65-above">65 tahun ke atas</label>
-      </div>
+    <form ref={formRef} onSubmit={(e) => e.preventDefault()} className="max-w-3xl mx-auto">
+      <RadioGroup
+        name="age"
+        label="1. Usia:"
+        value={answers.age}
+        onChange={handleChange}
+        options={[
+          { id: "under-18", value: "0", label: "Di bawah 18 tahun" },
+          { id: "18-24", value: "0", label: "18-24 tahun" },
+          { id: "25-34", value: "0", label: "25-34 tahun" },
+          { id: "35-44", value: "0", label: "35-44 tahun" },
+          { id: "45-54", value: "0", label: "45-54 tahun" },
+          { id: "55-64", value: "0", label: "55-64 tahun" },
+          { id: "65-above", value: "0", label: "65 tahun ke atas" },
+        ]}
+      />
 
-      <p>2. Jenis Kelamin:</p>
-      <div>
-        <input type="radio" name="gender" value="0" id="male" />
-        <label htmlFor="male">Laki-laki</label>
-      </div>
-      <div>
-        <input type="radio" name="gender" value="0" id="female" />
-        <label htmlFor="female">Perempuan</label>
-      </div>
+      <RadioGroup
+        name="gender"
+        label="2. Jenis Kelamin:"
+        value={answers.gender}
+        onChange={handleChange}
+        options={[
+          { id: "male", value: "0", label: "Laki-laki" },
+          { id: "female", value: "0", label: "Perempuan" },
+        ]}
+      />
 
-      <p>3. Status Pendidikan:</p>
-      <div>
-        <input type="radio" name="education" value="0" id="no-education" />
-        <label htmlFor="no-education">Tidak/belum sekolah</label>
-      </div>
-      <div>
-        <input type="radio" name="education" value="0" id="elementary" />
-        <label htmlFor="elementary">SD/Sederajat</label>
-      </div>
-      <div>
-        <input type="radio" name="education" value="0" id="junior-high" />
-        <label htmlFor="junior-high">SMP/Sederajat</label>
-      </div>
-      <div>
-        <input type="radio" name="education" value="0" id="senior-high" />
-        <label htmlFor="senior-high">SMA/Sederajat</label>
-      </div>
-      <div>
-        <input type="radio" name="education" value="0" id="diploma" />
-        <label htmlFor="diploma">Diploma</label>
-      </div>
-      <div>
-        <input type="radio" name="education" value="0" id="bachelor" />
-        <label htmlFor="bachelor">Sarjana (S1)</label>
-      </div>
-      <div>
-        <input type="radio" name="education" value="0" id="postgraduate" />
-        <label htmlFor="postgraduate">Pascasarjana (S2/S3)</label>
-      </div>
+      <RadioGroup
+        name="education"
+        label="3. Status Pendidikan:"
+        value={answers.education}
+        onChange={handleChange}
+        options={[
+          { id: "no-education", value: "0", label: "Tidak/belum sekolah" },
+          { id: "elementary", value: "0", label: "SD/Sederajat" },
+          { id: "junior-high", value: "0", label: "SMP/Sederajat" },
+          { id: "senior-high", value: "0", label: "SMA/Sederajat" },
+          { id: "diploma", value: "0", label: "Diploma" },
+          { id: "bachelor", value: "0", label: "Sarjana (S1)" },
+          { id: "postgraduate", value: "0", label: "Pascasarjana (S2/S3)" },
+        ]}
+      />
 
-      <p>4. Pekerjaan:</p>
-      <div>
-        <input type="radio" name="occupation" value="0" id="student" />
-        <label htmlFor="student">Pelajar/Mahasiswa</label>
-      </div>
-      <div>
-        <input type="radio" name="occupation" value="0" id="private" />
-        <label htmlFor="private">Pegawai Swasta</label>
-      </div>
-      <div>
-        <input type="radio" name="occupation" value="0" id="government" />
-        <label htmlFor="government">Pegawai Negeri</label>
-      </div>
-      <div>
-        <input type="radio" name="occupation" value="0" id="entrepreneur" />
-        <label htmlFor="entrepreneur">Wirausaha</label>
-      </div>
-      <div>
-        <input type="radio" name="occupation" value="0" id="freelancer" />
-        <label htmlFor="freelancer">Pekerja Lepas/Freelancer</label>
-      </div>
-      <div>
-        <input type="radio" name="occupation" value="0" id="unemployed" />
-        <label htmlFor="unemployed">Tidak bekerja</label>
-      </div>
-      <div>
-        <input type="radio" name="occupation" value="0" id="others" />
-        <label htmlFor="others">Lainnya</label>
-      </div>
+      <RadioGroup
+        name="occupation"
+        label="4. Pekerjaan:"
+        value={answers.occupation}
+        onChange={handleChange}
+        options={[
+          { id: "student", value: "0", label: "Pelajar/Mahasiswa" },
+          { id: "private", value: "0", label: "Pegawai Swasta" },
+          { id: "government", value: "0", label: "Pegawai Negeri" },
+          { id: "entrepreneur", value: "0", label: "Wirausaha" },
+          { id: "freelancer", value: "0", label: "Pekerja Lepas/Freelancer" },
+          { id: "unemployed", value: "0", label: "Tidak bekerja" },
+          { id: "others", value: "0", label: "Lainnya" },
+        ]}
+      />
 
-      <p>5. Berapa banyak Anda merokok dalam sehari?</p>
-      <div>
-        <input type="radio" name="q1" value="1" id="less-10" />
-        <label htmlFor="less-10">kurang dari 10 batang/hari</label>
-      </div>
-      <div>
-        <input type="radio" name="q1" value="2" id="11-20" />
-        <label htmlFor="11-20">11-20 batang/hari</label>
-      </div>
-      <div>
-        <input type="radio" name="q1" value="3" id="21-30" />
-        <label htmlFor="21-30">21-30 batang/hari</label>
-      </div>
-      <div>
-        <input type="radio" name="q1" value="4" id="more-30" />
-        <label htmlFor="more-30">lebih dari 30 batang/hari</label>
-      </div>
+      <RadioGroup
+        name="q1"
+        label="5. Berapa banyak Anda merokok dalam sehari?"
+        value={answers.q1}
+        onChange={handleChange}
+        options={[
+          { id: "less-10", value: "1", label: "kurang dari 10 batang/hari" },
+          { id: "11-20", value: "2", label: "11-20 batang/hari" },
+          { id: "21-30", value: "3", label: "21-30 batang/hari" },
+          { id: "more-30", value: "4", label: "lebih dari 30 batang/hari" },
+        ]}
+      />
 
-      <p>6. Seberapa cepat Anda merokok setelah bangun tidur?</p>
-      <div>
-        <input type="radio" name="q2" value="3" id="5-min" />
-        <label htmlFor="5-min">5 menit setelah bangun tidur</label>
-      </div>
-      <div>
-        <input type="radio" name="q2" value="2" id="6-30-min" />
-        <label htmlFor="6-30-min">6-30 menit setelah bangun tidur</label>
-      </div>
-      <div>
-        <input type="radio" name="q2" value="1" id="30-min" />
-        <label htmlFor="30-min">30 menit setelah bangun tidur</label>
-      </div>
+      <RadioGroup
+        name="q2"
+        label="6. Seberapa cepat Anda merokok setelah bangun tidur?"
+        value={answers.q2}
+        onChange={handleChange}
+        options={[
+          {
+            id: "5-min",
+            value: "3",
+            label: "5 menit setelah bangun tidur",
+          },
+          {
+            id: "6-30-min",
+            value: "2",
+            label: "6-30 menit setelah bangun tidur",
+          },
+          {
+            id: "30-min",
+            value: "1",
+            label: "30 menit setelah bangun tidur",
+          },
+        ]}
+      />
 
-      <p>
-        7. Apakah Anda merasa kesulitan untuk tidak merokok di “no smoking
-        area”?
-      </p>
-      <div>
-        <input type="radio" name="q3" value="1" id="yes-q3" />
-        <label htmlFor="yes-q3">Ya</label>
-      </div>
-      <div>
-        <input type="radio" name="q3" value="0" id="no-q3" />
-        <label htmlFor="no-q3">Tidak</label>
-      </div>
+      <RadioGroup
+        name="q3"
+        label='7. Apakah Anda merasa kesulitan untuk tidak merokok di "no smoking area"?'
+        value={answers.q3}
+        onChange={handleChange}
+        options={[
+          { id: "yes-q3", value: "1", label: "Ya" },
+          { id: "no-q3", value: "0", label: "Tidak" },
+        ]}
+      />
 
-      <p>8. Apakah Anda kesulitan untuk tidak merokok di pagi hari?</p>
-      <div>
-        <input type="radio" name="q4" value="1" id="yes-q4" />
-        <label htmlFor="yes-q4">Ya</label>
-      </div>
-      <div>
-        <input type="radio" name="q4" value="0" id="no-q4" />
-        <label htmlFor="no-q4">Tidak</label>
-      </div>
+      <RadioGroup
+        name="q4"
+        label="8. Apakah Anda kesulitan untuk tidak merokok di pagi hari?"
+        value={answers.q4}
+        onChange={handleChange}
+        options={[
+          { id: "yes-q4", value: "1", label: "Ya" },
+          { id: "no-q4", value: "0", label: "Tidak" },
+        ]}
+      />
 
-      <p>
-        9. Apakah Anda lebih sering merokok saat bekerja/belajar daripada saat
-        jam istirahat?
-      </p>
-      <div>
-        <input type="radio" name="q5" value="1" id="yes-q5" />
-        <label htmlFor="yes-q5">Ya</label>
-      </div>
-      <div>
-        <input type="radio" name="q5" value="0" id="no-q5" />
-        <label htmlFor="no-q5">Tidak</label>
-      </div>
+      <RadioGroup
+        name="q5"
+        label="9. Apakah Anda lebih sering merokok saat bekerja/belajar daripada saat jam istirahat?"
+        value={answers.q5}
+        onChange={handleChange}
+        options={[
+          { id: "yes-q5", value: "1", label: "Ya" },
+          { id: "no-q5", value: "0", label: "Tidak" },
+        ]}
+      />
 
-      <p>10. Apakah Anda masih merokok saat sakit?</p>
-      <div>
-        <input type="radio" name="q6" value="1" id="yes-q6" />
-        <label htmlFor="yes-q6">Ya</label>
-      </div>
-      <div>
-        <input type="radio" name="q6" value="0" id="no-q6" />
-        <label htmlFor="no-q6">Tidak</label>
-      </div>
+      <RadioGroup
+        name="q6"
+        label="10. Apakah Anda masih merokok saat sakit?"
+        value={answers.q6}
+        onChange={handleChange}
+        options={[
+          { id: "yes-q6", value: "1", label: "Ya" },
+          { id: "no-q6", value: "0", label: "Tidak" },
+        ]}
+      />
 
-      <div className="button-group">
-        <button type="button" className="hitung" onClick={handleCalculate}>
+      <div className="flex flex-col sm:flex-row gap-4 mt-10">
+        <button 
+          type="button" 
+          onClick={handleCalculate}
+          className="flex-1 rounded-xl bg-teal-600 px-6 py-4 text-base font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 transition-colors"
+        >
           Hitung Kecanduan
         </button>
-        <button type="button" className="clear" onClick={TesHandler.clearForm}>
+        <button 
+          type="button" 
+          onClick={handleClear}
+          className="flex-1 rounded-xl bg-rose-50 px-6 py-4 text-base font-semibold text-rose-600 shadow-sm ring-1 ring-inset ring-rose-200 hover:bg-rose-100 transition-colors"
+        >
           Bersihkan Jawaban
         </button>
       </div>

@@ -1,5 +1,6 @@
-// RegisterForm.jsx
 import React, { useState } from "react";
+import { Input } from "./ui/Input";
+import { Button } from "./ui/Button";
 
 function RegisterInput({ onRegister }) {
   const [email, setEmail] = useState("");
@@ -21,40 +22,48 @@ function RegisterInput({ onRegister }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        id="firstName"
-        placeholder="First Name"
-        value={firstName}
-        onChange={(e) => setFirstName(e.target.value)}
-        required
-      />
-      <input
-        type="text"
-        id="lastName"
-        placeholder="Last Name"
-        value={lastName}
-        onChange={(e) => setLastName(e.target.value)}
-        required
-      />
-      <input
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-full max-w-sm">
+      <div className="flex gap-4">
+        <Input
+          type="text"
+          id="firstName"
+          label="Nama Depan"
+          placeholder="Nama Depan"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          required
+        />
+        <Input
+          type="text"
+          id="lastName"
+          label="Nama Belakang"
+          placeholder="Nama Belakang"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          required
+        />
+      </div>
+      <Input
         type="email"
         id="email"
-        placeholder="Email"
+        label="Alamat Email"
+        placeholder="nama@email.com"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
       />
-      <input
+      <Input
         type="password"
         id="password"
-        placeholder="Password"
+        label="Kata Sandi"
+        placeholder="Minimal 6 karakter"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         required
       />
-      <button type="submit">Sign Up</button>
+      <Button type="submit" className="w-full mt-2">
+        Buat Akun
+      </Button>
     </form>
   );
 }
