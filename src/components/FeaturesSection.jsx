@@ -40,7 +40,7 @@ function FeaturesSection() {
               </p>
               <button 
                 onClick={goToTest}
-                className="mt-auto w-full rounded-xl bg-teal-600 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 transition-colors"
+                className="mt-auto w-full rounded-xl bg-teal-600 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-teal-600 transition-colors"
               >
                 Mulai Tes
               </button>
@@ -57,7 +57,7 @@ function FeaturesSection() {
               </p>
               <button 
                 onClick={goToCalculator}
-                className="mt-auto w-full rounded-xl bg-teal-600 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 transition-colors"
+                className="mt-auto w-full rounded-xl bg-teal-600 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-teal-600 transition-colors"
               >
                 Gunakan Kalkulator
               </button>
@@ -74,7 +74,7 @@ function FeaturesSection() {
               </p>
               <button 
                 onClick={goToForum}
-                className="mt-auto w-full rounded-xl bg-teal-600 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 transition-colors"
+                className="mt-auto w-full rounded-xl bg-teal-600 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-teal-600 transition-colors"
               >
                 Masuk Forum
               </button>

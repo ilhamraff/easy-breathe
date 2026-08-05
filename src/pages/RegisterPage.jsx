@@ -40,7 +40,7 @@ function RegisterPage() {
           alt="Ilustrasi berhenti merokok" 
           className="absolute inset-0 w-full h-full object-cover opacity-80"
         />
-        <div className="absolute inset-0 z-20 flex flex-col justify-end p-12 bg-gradient-to-t from-teal-950 via-teal-900/60 to-transparent">
+        <div className="absolute inset-0 z-20 flex flex-col justify-end p-12 bg-linear-to-t from-teal-950 via-teal-900/60 to-transparent">
           <h2 className="text-4xl font-bold text-white mb-4">Langkah Pertama Anda.</h2>
           <p className="text-teal-100 max-w-md text-lg">
             Bergabunglah sekarang dan temukan metode, pelacakan, dan dukungan yang Anda butuhkan untuk kehidupan bebas asap rokok.

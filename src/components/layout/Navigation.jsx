@@ -83,6 +83,7 @@ function Navigation() {
   );
 
   return (
+    <>
     <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-md shadow-sm' : 'bg-white'}`}>
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
         
@@ -127,57 +128,58 @@ function Navigation() {
           <FiMenu size={24} />
         </button>
       </div>
+    </header>
 
-      {/* Mobile Drawer Overlay */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 md:hidden">
-          <div 
-            className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm"
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
-          <div className="fixed inset-y-0 right-0 w-full max-w-sm bg-white px-6 py-6 shadow-xl sm:ring-1 sm:ring-slate-900/10">
-            <div className="flex items-center justify-between mb-8">
-              <span className="text-2xl font-bold tracking-tight text-teal-800">
-                Easy Breathe.
-              </span>
-              <button 
-                className="rounded-lg p-2 text-slate-600 hover:bg-slate-100"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <FiX size={24} />
-              </button>
-            </div>
-            
-            <nav className="flex flex-col mb-8">
-              <NavLinks mobile={true} />
-            </nav>
-            
-            <div className="mt-auto border-t border-slate-100 pt-8">
-              {isAuthenticated ? (
-                <div className="flex flex-col gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-teal-100 text-teal-700">
-                      <FiUser size={20} />
-                    </div>
-                    <div>
-                      <p className="text-sm text-slate-500">Masuk sebagai</p>
-                      <p className="font-medium text-slate-900">{userDetails?.firstName || "User"}</p>
-                    </div>
+    {/* Mobile Drawer Overlay */}
+    {isMobileMenuOpen && (
+      <div className="fixed inset-0 z-100 md:hidden">
+        <div 
+          className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+        <div className="fixed inset-y-0 right-0 w-full max-w-sm bg-white px-6 py-6 shadow-xl sm:ring-1 sm:ring-slate-900/10">
+          <div className="flex items-center justify-between mb-8">
+            <span className="text-2xl font-bold tracking-tight text-teal-800">
+              Easy Breathe.
+            </span>
+            <button 
+              className="rounded-lg p-2 text-slate-600 hover:bg-slate-100"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <FiX size={24} />
+            </button>
+          </div>
+          
+          <nav className="flex flex-col mb-8">
+            <NavLinks mobile={true} />
+          </nav>
+          
+          <div className="mt-auto border-t border-slate-100 pt-8">
+            {isAuthenticated ? (
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-teal-100 text-teal-700">
+                    <FiUser size={20} />
                   </div>
-                  <Button variant="outline" className="w-full justify-center text-red-600" onClick={handleLogout}>
-                    <FiLogOut className="mr-2" /> Keluar
-                  </Button>
+                  <div>
+                    <p className="text-sm text-slate-500">Masuk sebagai</p>
+                    <p className="font-medium text-slate-900">{userDetails?.firstName || "User"}</p>
+                  </div>
                 </div>
-              ) : (
-                <Button onClick={() => navigate("/login")} className="w-full justify-center">
-                  Masuk ke Akun
+                <Button variant="outline" className="w-full justify-center text-red-600" onClick={handleLogout}>
+                  <FiLogOut className="mr-2" /> Keluar
                 </Button>
-              )}
-            </div>
+              </div>
+            ) : (
+              <Button onClick={() => navigate("/login")} className="w-full justify-center">
+                Masuk ke Akun
+              </Button>
+            )}
           </div>
         </div>
-      )}
-    </header>
+      </div>
+    )}
+    </>
   );
 }
 

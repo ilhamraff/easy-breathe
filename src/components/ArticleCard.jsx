@@ -6,7 +6,7 @@ function ArticleCard({ article, id }) {
 
   return (
     <article className="flex flex-col items-start justify-between bg-white rounded-3xl overflow-hidden ring-1 ring-slate-200 transition-all hover:shadow-lg hover:-translate-y-1">
-      <div className="w-full relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-[3/2] overflow-hidden">
+      <div className="w-full relative aspect-video sm:aspect-2/1 lg:aspect-3/2 overflow-hidden">
         <img
           src={thumbnail}
           alt={title}

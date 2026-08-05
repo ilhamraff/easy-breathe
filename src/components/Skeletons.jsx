@@ -3,7 +3,7 @@ import React from "react";
 export function ArticleCardSkeleton() {
   return (
     <div className="flex flex-col items-start justify-between bg-white rounded-3xl overflow-hidden ring-1 ring-slate-200 animate-pulse">
-      <div className="w-full relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-[3/2] bg-slate-200"></div>
+      <div className="w-full relative aspect-video sm:aspect-2/1 lg:aspect-3/2 bg-slate-200"></div>
       <div className="flex flex-1 flex-col justify-between p-6 sm:p-8 w-full">
         <div className="flex-1 w-full">
           <div className="h-6 bg-slate-200 rounded-full w-3/4 mb-4"></div>

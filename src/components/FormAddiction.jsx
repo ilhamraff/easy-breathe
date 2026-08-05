@@ -232,7 +232,7 @@ function AddictionForm({ onCalculateAddiction }) {
         <button 
           type="button" 
           onClick={handleCalculate}
-          className="flex-1 rounded-xl bg-teal-600 px-6 py-4 text-base font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 transition-colors"
+          className="flex-1 rounded-xl bg-teal-600 px-6 py-4 text-base font-semibold text-white shadow-sm hover:bg-teal-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-teal-600 transition-colors"
         >
           Hitung Kecanduan
         </button>
