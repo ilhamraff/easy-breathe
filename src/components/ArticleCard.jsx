@@ -5,7 +5,7 @@ function ArticleCard({ article, id }) {
   const { thumbnail, title, content } = article;
 
   return (
-    <article className="flex flex-col items-start justify-between bg-white rounded-3xl overflow-hidden ring-1 ring-slate-200 transition-all hover:shadow-lg hover:-translate-y-1">
+    <article className="relative flex flex-col items-start justify-between bg-white rounded-3xl overflow-hidden ring-1 ring-slate-200 transition-all hover:shadow-lg hover:-translate-y-1 group">
       <div className="w-full relative aspect-video sm:aspect-2/1 lg:aspect-3/2 overflow-hidden">
         <img
           src={thumbnail}
