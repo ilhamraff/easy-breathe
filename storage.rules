@@ -1,0 +1,31 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Helper: check if the requesting user is an admin
+    function isAdmin() {
+      return request.auth != null &&
+        firestore.get(/databases/(default)/documents/Users/$(request.auth.uid)).data.role == "admin";
+    }
+
+    // Thumbnails: public read, admin-only write
+    match /thumbnails/{fileName} {
+      // Anyone can view article thumbnails
+      allow read: if true;
+
+      // Only admins can upload, overwrite, or delete thumbnails
+      allow write: if isAdmin()
+        && request.resource.size < 5 * 1024 * 1024  // Max 5MB
+        && request.resource.contentType.matches('image/.*');  // Images only
+
+      // Allow admin to delete thumbnails (no resource validation needed)
+      allow delete: if isAdmin();
+    }
+
+    // Default: deny all other access
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

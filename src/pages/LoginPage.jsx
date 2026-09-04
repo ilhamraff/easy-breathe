@@ -1,4 +1,5 @@
 // LoginPage.jsx
+import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
 import { auth } from "../config/firebase";
@@ -8,14 +9,18 @@ import LoginInput from "../components/LoginInput";
 
 function LoginPage() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   async function loginHandler(email, password) {
+    setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
       navigate("/home");
     } catch (error) {
       console.error(error.message);
       showErrorToast(`Login gagal: ${error.message}`);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -47,7 +52,7 @@ function LoginPage() {
             </p>
           </div>
 
-          <LoginInput onLogin={loginHandler} />
+          <LoginInput onLogin={loginHandler} loading={loading} />
           
           <div className="mt-8 text-center text-sm text-slate-600">
             Belum punya akun?{" "}

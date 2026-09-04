@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FiChevronDown, FiLogOut, FiMenu, FiX, FiUser } from "react-icons/fi";
+import { FiChevronDown, FiLogOut, FiMenu, FiX, FiUser, FiSettings } from "react-icons/fi";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/Button";
@@ -9,7 +9,7 @@ function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   
-  const { userDetails, isAuthenticated, logout } = useAuth();
+  const { userDetails, isAuthenticated, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -103,6 +103,15 @@ function Navigation() {
         <div className="hidden md:flex items-center gap-4">
           {isAuthenticated ? (
             <div className="flex items-center gap-4">
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-slate-800"
+                >
+                  <FiSettings size={13} />
+                  Admin Panel
+                </Link>
+              )}
               <div className="flex items-center gap-2 text-sm font-medium text-slate-700">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-100 text-teal-700">
                   <FiUser />
@@ -157,6 +166,15 @@ function Navigation() {
           <div className="mt-auto border-t border-slate-100 pt-8">
             {isAuthenticated ? (
               <div className="flex flex-col gap-4">
+                {isAdmin && (
+                  <Link
+                    to="/admin"
+                    className="flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-slate-800"
+                  >
+                    <FiSettings size={15} />
+                    Admin Panel
+                  </Link>
+                )}
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-teal-100 text-teal-700">
                     <FiUser size={20} />

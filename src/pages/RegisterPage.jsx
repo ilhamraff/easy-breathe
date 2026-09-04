@@ -6,10 +6,12 @@ import { ToastContainer } from "react-toastify";
 import { showSuccessToast, showErrorToast } from "../utils/toast";
 import { Link } from "react-router-dom";
 import RegisterInput from "../components/RegisterInput";
-import React from "react";
+import React, { useState } from "react";
 
 function RegisterPage() {
+  const [loading, setLoading] = useState(false);
   async function registerHandler(email, password, firstName, lastName) {
+    setLoading(true);
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       const user = auth.currentUser;
@@ -19,6 +21,7 @@ function RegisterPage() {
           email: user.email,
           firstName: firstName,
           lastName: lastName,
+          role: "user",
           createdAt: serverTimestamp(),
         });
       }
@@ -27,6 +30,8 @@ function RegisterPage() {
     } catch (error) {
       console.error(error);
       showErrorToast(`Registrasi gagal: ${error.message}`);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -58,7 +63,7 @@ function RegisterPage() {
             </p>
           </div>
 
-          <RegisterInput onRegister={registerHandler} />
+          <RegisterInput onRegister={registerHandler} loading={loading} />
           
           <div className="mt-8 text-center text-sm text-slate-600">
             Sudah punya Akun?{" "}

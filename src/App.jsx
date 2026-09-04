@@ -11,8 +11,15 @@ import ArticleDetail from "./pages/ArticleDetailPage";
 import ForumPage from "./pages/ForumPage";
 import ScrollToTop from "./components/ScrollToTop";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./components/AdminRoute";
 import { useAuth } from "./contexts/AuthContext";
 import LoadingAnimation from "./components/Loading";
+
+// Admin pages
+import AdminLayout from "./admin/layouts/AdminLayout";
+import ArticleList from "./admin/pages/ArticleList";
+import ArticleForm from "./admin/pages/ArticleForm";
+import AdminUsers from "./admin/pages/AdminUsers";
 
 function App() {
   const { isAuthenticated, loading } = useAuth();
@@ -102,9 +109,60 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Admin routes - require admin role */}
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <Navigate to="/admin/articles" replace />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/articles"
+          element={
+            <AdminRoute>
+              <AdminLayout>
+                <ArticleList />
+              </AdminLayout>
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/articles/new"
+          element={
+            <AdminRoute>
+              <AdminLayout>
+                <ArticleForm />
+              </AdminLayout>
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/articles/:id/edit"
+          element={
+            <AdminRoute>
+              <AdminLayout>
+                <ArticleForm />
+              </AdminLayout>
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/users"
+          element={
+            <AdminRoute>
+              <AdminLayout>
+                <AdminUsers />
+              </AdminLayout>
+            </AdminRoute>
+          }
+        />
       </Routes>
     </>
   );
 }
 
 export default App;
+

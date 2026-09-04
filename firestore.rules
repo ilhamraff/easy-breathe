@@ -10,6 +10,7 @@ rules_version = '2';
 //   - email: string (required, PII - owner-only access)
 //   - firstName: string (required, 1-100 chars)
 //   - lastName: string (required, 1-100 chars)
+//   - role: string (required, "user" or "admin")
 //   - createdAt: timestamp (required, immutable after creation)
 //
 // Collection: articles
@@ -20,7 +21,7 @@ rules_version = '2';
 //   - thumbnail: string (optional, URL)
 //   - author: string (required)
 //   - createdAt: string or timestamp (required)
-// Access: Public read, admin-only write (via console for now)
+// Access: Public read, admin-only write
 //
 // Collection: forums
 // Document ID: auto-generated
@@ -56,6 +57,11 @@ service cloud.firestore {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
+    function isAdmin() {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/Users/$(request.auth.uid)).data.role == "admin";
+    }
+
     function hasRequiredFields(fields) {
       return request.resource.data.keys().hasAll(fields);
     }
@@ -78,21 +84,32 @@ service cloud.firestore {
     // Domain Validators
     // ===============================================================
 
+    // User creation: role must be set to "user" by default
     function isValidUserCreate(data) {
-      return hasOnlyAllowedFields(['email', 'firstName', 'lastName', 'createdAt']) &&
-        hasRequiredFields(['email', 'firstName', 'lastName']) &&
+      return hasOnlyAllowedFields(['email', 'firstName', 'lastName', 'role', 'createdAt']) &&
+        hasRequiredFields(['email', 'firstName', 'lastName', 'role']) &&
         data.email is string && data.email.size() > 0 && data.email.size() <= 320 &&
         data.firstName is string && data.firstName.size() > 0 && data.firstName.size() <= 100 &&
-        data.lastName is string && data.lastName.size() > 0 && data.lastName.size() <= 100;
+        data.lastName is string && data.lastName.size() > 0 && data.lastName.size() <= 100 &&
+        data.role == "user";
     }
 
-    function isValidUserUpdate(data) {
-      return hasOnlyAllowedFields(['email', 'firstName', 'lastName', 'createdAt']) &&
+    // User self-update: cannot change role or createdAt
+    function isValidUserSelfUpdate(data) {
+      return hasOnlyAllowedFields(['email', 'firstName', 'lastName', 'role', 'createdAt']) &&
         hasRequiredFields(['email', 'firstName', 'lastName']) &&
         data.email is string && data.email.size() > 0 && data.email.size() <= 320 &&
         data.firstName is string && data.firstName.size() > 0 && data.firstName.size() <= 100 &&
         data.lastName is string && data.lastName.size() > 0 && data.lastName.size() <= 100 &&
-        areImmutableFieldsUnchanged(['createdAt']);
+        areImmutableFieldsUnchanged(['role', 'createdAt']);
+    }
+
+    // Admin updating another user's role
+    function isValidAdminRoleUpdate(data) {
+      return hasOnlyAllowedFields(['email', 'firstName', 'lastName', 'role', 'createdAt']) &&
+        data.role is string &&
+        (data.role == "user" || data.role == "admin") &&
+        areImmutableFieldsUnchanged(['email', 'firstName', 'lastName', 'createdAt']);
     }
 
     function isValidForumPostCreate(data) {
@@ -126,27 +143,28 @@ service cloud.firestore {
 
     // Users collection - PII protected, owner-only access
     match /Users/{userId} {
-      // Only the owner can read their own user document (contains email/PII)
-      allow read: if isOwner(userId);
+      // Owner can read their own document; admins can read any user (for Kelola Admin)
+      allow read: if isOwner(userId) || isAdmin();
 
-      // Only the owner can create their own user document
+      // Only the owner can create their own user document (role must be "user")
       allow create: if isOwner(userId) && isValidUserCreate(request.resource.data);
 
-      // Only the owner can update their own user document
-      allow update: if isOwner(userId) && isValidUserUpdate(request.resource.data);
+      // Owner can update their own profile (but NOT their role)
+      // Admin can update another user's role (but NOT other fields)
+      allow update: if (isOwner(userId) && isValidUserSelfUpdate(request.resource.data))
+                    || (isAdmin() && !isOwner(userId) && isValidAdminRoleUpdate(request.resource.data));
 
       // Users cannot delete their own profile document
       allow delete: if false;
     }
 
-    // Articles collection - public read, no client-side write
+    // Articles collection - public read, admin-only write
     match /articles/{articleId} {
       // Anyone can read articles (public content)
       allow read: if true;
 
-      // Articles are managed via Firebase Console only
-      // No client-side create/update/delete allowed
-      allow create, update, delete: if false;
+      // Only admins can create, update, and delete articles
+      allow create, update, delete: if isAdmin();
     }
 
     // Forums collection - public read, authenticated write with ownership

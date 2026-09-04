@@ -8,6 +8,7 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
+  const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,13 +19,22 @@ export function AuthProvider({ children }) {
         try {
           const docRef = doc(db, "Users", firebaseUser.uid);
           const docSnap = await getDoc(docRef);
-          setUserDetails(docSnap.exists() ? docSnap.data() : null);
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            setUserDetails(data);
+            setRole(data.role || "user");
+          } else {
+            setUserDetails(null);
+            setRole(null);
+          }
         } catch (error) {
           console.error("Failed to fetch user details:", error);
           setUserDetails(null);
+          setRole(null);
         }
       } else {
         setUserDetails(null);
+        setRole(null);
       }
 
       setLoading(false);
@@ -38,6 +48,7 @@ export function AuthProvider({ children }) {
       await signOut(auth);
       setUser(null);
       setUserDetails(null);
+      setRole(null);
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -46,6 +57,8 @@ export function AuthProvider({ children }) {
   const value = {
     user,
     userDetails,
+    role,
+    isAdmin: role === "admin",
     loading,
     logout,
     isAuthenticated: !!user,
@@ -61,3 +74,4 @@ export function useAuth() {
   }
   return context;
 }
+
