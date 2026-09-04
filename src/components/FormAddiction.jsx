@@ -94,13 +94,13 @@ function AddictionForm({ onCalculateAddiction }) {
         value={answers.age}
         onChange={handleChange}
         options={[
-          { id: "under-18", value: "0", label: "Di bawah 18 tahun" },
-          { id: "18-24", value: "0", label: "18-24 tahun" },
-          { id: "25-34", value: "0", label: "25-34 tahun" },
-          { id: "35-44", value: "0", label: "35-44 tahun" },
-          { id: "45-54", value: "0", label: "45-54 tahun" },
-          { id: "55-64", value: "0", label: "55-64 tahun" },
-          { id: "65-above", value: "0", label: "65 tahun ke atas" },
+          { id: "under-18", value: "under-18", label: "Di bawah 18 tahun" },
+          { id: "18-24", value: "18-24", label: "18-24 tahun" },
+          { id: "25-34", value: "25-34", label: "25-34 tahun" },
+          { id: "35-44", value: "35-44", label: "35-44 tahun" },
+          { id: "45-54", value: "45-54", label: "45-54 tahun" },
+          { id: "55-64", value: "55-64", label: "55-64 tahun" },
+          { id: "65-above", value: "65-above", label: "65 tahun ke atas" },
         ]}
       />
 
@@ -110,8 +110,8 @@ function AddictionForm({ onCalculateAddiction }) {
         value={answers.gender}
         onChange={handleChange}
         options={[
-          { id: "male", value: "0", label: "Laki-laki" },
-          { id: "female", value: "0", label: "Perempuan" },
+          { id: "male", value: "male", label: "Laki-laki" },
+          { id: "female", value: "female", label: "Perempuan" },
         ]}
       />
 
@@ -121,13 +121,13 @@ function AddictionForm({ onCalculateAddiction }) {
         value={answers.education}
         onChange={handleChange}
         options={[
-          { id: "no-education", value: "0", label: "Tidak/belum sekolah" },
-          { id: "elementary", value: "0", label: "SD/Sederajat" },
-          { id: "junior-high", value: "0", label: "SMP/Sederajat" },
-          { id: "senior-high", value: "0", label: "SMA/Sederajat" },
-          { id: "diploma", value: "0", label: "Diploma" },
-          { id: "bachelor", value: "0", label: "Sarjana (S1)" },
-          { id: "postgraduate", value: "0", label: "Pascasarjana (S2/S3)" },
+          { id: "no-education", value: "no-education", label: "Tidak/belum sekolah" },
+          { id: "elementary", value: "elementary", label: "SD/Sederajat" },
+          { id: "junior-high", value: "junior-high", label: "SMP/Sederajat" },
+          { id: "senior-high", value: "senior-high", label: "SMA/Sederajat" },
+          { id: "diploma", value: "diploma", label: "Diploma" },
+          { id: "bachelor", value: "bachelor", label: "Sarjana (S1)" },
+          { id: "postgraduate", value: "postgraduate", label: "Pascasarjana (S2/S3)" },
         ]}
       />
 
@@ -137,13 +137,13 @@ function AddictionForm({ onCalculateAddiction }) {
         value={answers.occupation}
         onChange={handleChange}
         options={[
-          { id: "student", value: "0", label: "Pelajar/Mahasiswa" },
-          { id: "private", value: "0", label: "Pegawai Swasta" },
-          { id: "government", value: "0", label: "Pegawai Negeri" },
-          { id: "entrepreneur", value: "0", label: "Wirausaha" },
-          { id: "freelancer", value: "0", label: "Pekerja Lepas/Freelancer" },
-          { id: "unemployed", value: "0", label: "Tidak bekerja" },
-          { id: "others", value: "0", label: "Lainnya" },
+          { id: "student", value: "student", label: "Pelajar/Mahasiswa" },
+          { id: "private", value: "private", label: "Pegawai Swasta" },
+          { id: "government", value: "government", label: "Pegawai Negeri" },
+          { id: "entrepreneur", value: "entrepreneur", label: "Wirausaha" },
+          { id: "freelancer", value: "freelancer", label: "Pekerja Lepas/Freelancer" },
+          { id: "unemployed", value: "unemployed", label: "Tidak bekerja" },
+          { id: "others", value: "others", label: "Lainnya" },
         ]}
       />
 
