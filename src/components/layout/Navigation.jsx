@@ -113,10 +113,12 @@ function Navigation() {
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
         
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2">
-          <span className="text-2xl font-bold tracking-tight text-teal-800">
-            Easy Breathe.
-          </span>
+        <Link to="/" className="flex items-center">
+          <img
+            src="/easybreathe-logo.svg"
+            alt="Easy Breathe"
+            className="h-9 w-auto object-contain transition-transform duration-200 hover:opacity-90"
+          />
         </Link>
 
         {/* Desktop Navigation */}
@@ -173,9 +175,13 @@ function Navigation() {
         />
         <div className="fixed inset-y-0 right-0 w-full max-w-sm bg-white px-6 py-6 shadow-xl sm:ring-1 sm:ring-slate-900/10">
           <div className="flex items-center justify-between mb-8">
-            <span className="text-2xl font-bold tracking-tight text-teal-800">
-              Easy Breathe.
-            </span>
+            <Link to="/" className="flex items-center">
+              <img
+                src="/easybreathe-logo.svg"
+                alt="Easy Breathe"
+                className="h-8 w-auto object-contain"
+              />
+            </Link>
             <button 
               className="rounded-lg p-2 text-slate-600 hover:bg-slate-100"
               onClick={() => setIsMobileMenuOpen(false)}
