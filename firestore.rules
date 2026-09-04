@@ -158,13 +158,32 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    // Articles collection - public read, admin-only write
+    // Articles collection - public read for approved, author access for own pending/rejected, admin full access
     match /articles/{articleId} {
-      // Anyone can read articles (public content)
-      allow read: if true;
+      // 1. Read: siapapun boleh membaca yang approved, pemilik boleh membaca miliknya sendiri, admin boleh membaca semua
+      allow read: if resource.data.status == "approved"
+                  || isOwner(resource.data.authorId)
+                  || isAdmin();
 
-      // Only admins can create, update, and delete articles
-      allow create, update, delete: if isAdmin();
+      // 2. Create: admin bebas status; user login hanya jika authorId miliknya dan status == "pending"
+      allow create: if isAdmin() || (
+        isOwner(request.resource.data.authorId) &&
+        request.resource.data.status == "pending"
+      );
+
+      // 3. Update: admin bebas; author hanya jika miliknya, status lama != "approved", dan status baru == "pending"
+      allow update: if isAdmin() || (
+        isOwner(resource.data.authorId) &&
+        resource.data.status != "approved" &&
+        request.resource.data.authorId == request.auth.uid &&
+        request.resource.data.status == "pending"
+      );
+
+      // 4. Delete: admin bebas; author hanya boleh hapus dokumen miliknya yang status != "approved"
+      allow delete: if isAdmin() || (
+        isOwner(resource.data.authorId) &&
+        resource.data.status != "approved"
+      );
     }
 
     // Forums collection - public read, authenticated write with ownership

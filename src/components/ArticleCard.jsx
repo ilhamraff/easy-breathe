@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { stripHtml } from "@/utils/text";
 
 function ArticleCard({ article, id }) {
   const { thumbnail, title, content } = article;
+  const cleanExcerpt = stripHtml(content);
 
   return (
     <article className="relative flex flex-col items-start justify-between bg-white rounded-3xl overflow-hidden ring-1 ring-slate-200 transition-all hover:shadow-lg hover:-translate-y-1 group">
@@ -22,7 +24,7 @@ function ArticleCard({ article, id }) {
             </Link>
           </h3>
           <p className="mt-4 text-sm leading-6 text-slate-600 line-clamp-3">
-            {content}
+            {cleanExcerpt}
           </p>
         </div>
         <div className="mt-6 flex items-center">

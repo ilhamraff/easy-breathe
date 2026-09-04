@@ -32,6 +32,8 @@ function Navigation() {
     navigate("/");
   };
 
+  const [isContributionOpen, setIsContributionOpen] = useState(false);
+
   const NavLinks = ({ mobile = false }) => (
     <>
       <Link 
@@ -72,6 +74,29 @@ function Navigation() {
       >
         Artikel
       </Link>
+
+      {isAuthenticated && (
+        <div className={`relative group ${mobile ? 'block border-b border-slate-100 py-3' : 'flex items-center'}`}>
+          <button 
+            onClick={() => setIsContributionOpen(!isContributionOpen)}
+            className={`flex items-center gap-1 font-medium transition-colors hover:text-teal-600 ${mobile ? 'w-full justify-between text-lg' : 'text-slate-600'}`}
+          >
+            Kontribusi <FiChevronDown className={`transition-transform duration-200 ${isContributionOpen ? 'rotate-180' : ''}`} />
+          </button>
+          
+          <div className={`
+            ${mobile ? (isContributionOpen ? 'block mt-4 pl-4 space-y-4' : 'hidden') : 
+            'absolute top-full left-0 mt-2 w-48 rounded-xl bg-white p-2 shadow-lg ring-1 ring-slate-900/5 transition-all opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-2 group-hover:translate-y-0'}
+          `}>
+            <Link to="/kontribusi/tulis" className="block rounded-lg px-4 py-2 text-sm font-medium text-slate-700 hover:bg-teal-50 hover:text-teal-700">
+              Tulis Artikel
+            </Link>
+            <Link to="/kontribusi/artikel-saya" className="block rounded-lg px-4 py-2 text-sm font-medium text-slate-700 hover:bg-teal-50 hover:text-teal-700">
+              Artikel Saya
+            </Link>
+          </div>
+        </div>
+      )}
       
       <Link 
         to="/about" 

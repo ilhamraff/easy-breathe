@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { getAllArticles } from "../services/articles";
+import { getPublicArticles } from "../services/articles";
 import ArticlesList from "../components/ArticleList";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import ArticleSearch from "../components/ArticleSearch";
 import { ArticleCardSkeleton } from "../components/Skeletons";
+import { FiEdit3 } from "react-icons/fi";
 
 const ArticlesPage = () => {
   const [articles, setArticles] = useState([]);
@@ -17,7 +18,7 @@ const ArticlesPage = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const articlesList = await getAllArticles();
+        const articlesList = await getPublicArticles();
         setArticles(articlesList);
       } catch (err) {
         console.error("Failed to fetch articles:", err);
@@ -83,8 +84,17 @@ const ArticlesPage = () => {
           </p>
         </header>
         
-        <div className="max-w-xl mx-auto mb-16">
-          <ArticleSearch keyword={keyword} keywordChange={onKeywordChangeHandler} />
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-2xl mx-auto mb-12">
+          <div className="w-full sm:flex-1">
+            <ArticleSearch keyword={keyword} keywordChange={onKeywordChangeHandler} />
+          </div>
+          <Link
+            to="/kontribusi/tulis"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-teal-700 transition-colors shrink-0 w-full sm:w-auto"
+          >
+            <FiEdit3 size={16} />
+            Tulis Artikel
+          </Link>
         </div>
         
         <div className="mt-16 sm:mt-20 lg:mt-24">

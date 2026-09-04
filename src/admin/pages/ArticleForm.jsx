@@ -8,6 +8,7 @@ import {
   createArticle,
   updateArticle,
 } from "@/services/articles";
+import { useAuth } from "@/contexts/AuthContext";
 import { showSuccessToast, showErrorToast } from "@/utils/toast";
 import { ToastContainer } from "react-toastify";
 
@@ -37,10 +38,12 @@ function ArticleForm() {
   const { id } = useParams();
   const isEditMode = !!id;
   const navigate = useNavigate();
+  const { user, userDetails } = useAuth();
 
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [content, setContent] = useState("");
+  const [existingStatus, setExistingStatus] = useState("approved");
   const [createdAt, setCreatedAt] = useState(
     new Date().toISOString().split("T")[0]
   );
@@ -50,6 +53,17 @@ function ArticleForm() {
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(isEditMode);
+
+  // Set default author name if creating new article
+  useEffect(() => {
+    if (!isEditMode && !author) {
+      const defaultName =
+        userDetails?.firstName || userDetails?.lastName
+          ? `${userDetails.firstName || ""} ${userDetails.lastName || ""}`.trim()
+          : user?.displayName || "Admin";
+      setAuthor(defaultName);
+    }
+  }, [isEditMode, author, user, userDetails]);
 
   // Fetch existing article data for edit mode
   useEffect(() => {
@@ -69,6 +83,7 @@ function ArticleForm() {
         setCreatedAt(article.createdAt || "");
         setExistingThumbnail(article.thumbnail || "");
         setImagePreview(article.thumbnail || "");
+        setExistingStatus(article.status || "approved");
       } catch (error) {
         console.error("Failed to fetch article:", error);
         showErrorToast("Gagal memuat data artikel.");
@@ -130,13 +145,14 @@ function ArticleForm() {
         content,
         createdAt,
         oldThumbnail: existingThumbnail,
+        status: existingStatus || "approved",
       };
 
       if (isEditMode) {
         await updateArticle(id, data, imageFile);
         showSuccessToast("Artikel berhasil diperbarui.");
       } else {
-        await createArticle(data, imageFile);
+        await createArticle(data, imageFile, user);
         showSuccessToast("Artikel berhasil ditambahkan.");
       }
 

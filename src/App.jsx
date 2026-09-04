@@ -20,6 +20,11 @@ import AdminLayout from "./admin/layouts/AdminLayout";
 import ArticleList from "./admin/pages/ArticleList";
 import ArticleForm from "./admin/pages/ArticleForm";
 import AdminUsers from "./admin/pages/AdminUsers";
+import PendingArticles from "./admin/pages/PendingArticles";
+
+// Contribution pages
+import WriteArticlePage from "./pages/WriteArticlePage";
+import MyArticlesPage from "./pages/MyArticlesPage";
 
 function App() {
   const { isAuthenticated, loading } = useAuth();
@@ -109,6 +114,36 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/kontribusi/tulis"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <WriteArticlePage />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/kontribusi/edit/:id"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <WriteArticlePage />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/kontribusi/artikel-saya"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <MyArticlesPage />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
 
         {/* Admin routes - require admin role */}
         <Route
@@ -125,6 +160,16 @@ function App() {
             <AdminRoute>
               <AdminLayout>
                 <ArticleList />
+              </AdminLayout>
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/pending"
+          element={
+            <AdminRoute>
+              <AdminLayout>
+                <PendingArticles />
               </AdminLayout>
             </AdminRoute>
           }

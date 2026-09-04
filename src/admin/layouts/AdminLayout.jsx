@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   FiFileText,
+  FiClock,
   FiUsers,
   FiArrowLeft,
   FiLogOut,
@@ -13,9 +14,14 @@ import {
 
 const sidebarItems = [
   {
-    label: "Artikel",
+    label: "Semua Artikel",
     path: "/admin/articles",
     icon: FiFileText,
+  },
+  {
+    label: "Menunggu Persetujuan",
+    path: "/admin/pending",
+    icon: FiClock,
   },
   {
     label: "Kelola Admin",

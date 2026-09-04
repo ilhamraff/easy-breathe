@@ -11,8 +11,8 @@ function ConfirmRoleModal({ isOpen, user, newRole, onConfirm, onCancel, loading 
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
-        onClick={onCancel}
+        className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity"
+        onClick={!loading ? onCancel : undefined}
       />
 
       {/* Modal */}
@@ -20,7 +20,8 @@ function ConfirmRoleModal({ isOpen, user, newRole, onConfirm, onCancel, loading 
         {/* Close button */}
         <button
           onClick={onCancel}
-          className="absolute right-4 top-4 rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
+          disabled={loading}
+          className="absolute right-4 top-4 rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 disabled:opacity-50"
         >
           <FiX size={18} />
         </button>
